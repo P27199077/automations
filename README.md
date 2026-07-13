@@ -1,34 +1,76 @@
-# Custom Automation Scripts
+# Custom Developer Automations & Utility Scripts
 
-A collection of utility and automation scripts to speed up developer workflows and perform bulk tasks.
+A structured collection of developer scripts, converters, and asset processors to speed up work and automate repetitive bulk tasks.
 
 ---
 
-## 🛠️ Scripts Directory
+## 🛠️ Repository Directory Structure
 
-### 1. `make_public.py`
-A Python automation script that uses the GitHub REST API to bulk update the visibility of multiple private repositories to **Public** in a single run.
+```
+automations/
+├── README.md                  # Main developer documentation
+├── requirements.txt            # Python dependencies for the scripts
+│
+├── doc_converters/             # Document conversion utilities
+│   ├── README.md
+│   └── convert_docx_to_pdf.py # DOCX to PDF converter (via Word macOS automation)
+│
+├── excel_generation/           # Excel spreadsheets creation
+│   ├── README.md
+│   └── create_life_reset_excel.py # 60-Day life-reset challenge tracker workbook
+│
+├── github/                     # GitHub repository management
+│   ├── README.md
+│   └── make_public.py         # Bulk repository visibility updater (Private -> Public)
+│
+├── image_processing/           # Asset adjustments & transparent backgrounds
+│   ├── README.md
+│   ├── make_transparent.py    # Target color transparent rendering
+│   └── strip_backgrounds.py   # Multi-file background stripping
+│
+└── theme_tools/                # Style & color palette swappers
+    ├── README.md
+    ├── color_palette_hex.py   # React/Tailwind project hex re-themer
+    └── color_swap.py          # Tailwind slate -> stone color config converter
+```
 
-* **Configuration**:
-  * Set your GitHub Personal Access Token in the `TOKEN` variable.
-  * Enter your username in the `USERNAME` variable.
-  * List the names of the repositories you want to make public in the `REPOS` array.
+---
+
+## 🚀 Setup and Dependencies
+
+To run these scripts, set up your Python virtual environment and install the required modules:
+
+```bash
+# Navigate to the automations folder
+cd /Users/tanishagupta/.gemini/antigravity-ide/scratch/automations
+
+# Activate your virtual environment (if not already active)
+source ../venv/bin/bin/activate  # or path to your venv bin/activate
+
+# Install requirements
+pip install -r requirements.txt
+```
+
+---
+
+## 📄 Featured Utility: `convert_docx_to_pdf.py`
+
+This script uses AppleScript via the native macOS `osascript` terminal engine to automate **Microsoft Word** and export a `.docx` file as a high-fidelity `.pdf` file.
+
 * **Usage**:
   ```bash
-  python3 make_public.py
+  # Convert specifying explicit paths
+  python3 doc_converters/convert_docx_to_pdf.py -i /path/to/doc.docx -o /path/to/doc.pdf
+  
+  # Or run without arguments for interactive prompting
+  python3 doc_converters/convert_docx_to_pdf.py
   ```
 
 ---
 
-## 🚀 Adding New Automations in the Future
+## 📝 Contributions and Maintenance
 
-When you write a new script (e.g. `cleanup_temp.py`), you can add it to this repository:
-
-1. Save the script inside this folder.
-2. Edit this `README.md` to add a description under the directory list.
-3. Push the new file to GitHub:
-   ```bash
-   git add .
-   git commit -m "Add script: [Name of your new script]"
-   git push origin main
-   ```
+When adding new scripts:
+1. Save the script inside its appropriate directory (e.g. `image_processing/` or `github/`).
+2. Add a description in the corresponding folder's `README.md`.
+3. Update the global structure tree in this root `README.md`.
