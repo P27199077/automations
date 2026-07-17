@@ -46,7 +46,7 @@ To run these scripts, set up your Python virtual environment and install the req
 
 ```bash
 # Navigate to the automations folder
-cd /Users/tanishagupta/.gemini/antigravity-ide/scratch/automations
+cd automations
 
 # Activate your virtual environment (if not already active)
 source ../venv/bin/bin/activate  # or path to your venv bin/activate

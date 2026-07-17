@@ -1,8 +1,7 @@
 from PIL import Image
 import os
-
-img_path = '/Users/tanishagupta/.gemini/antigravity-ide/brain/62ac9306-be1e-4b2d-b362-3a0ef5388e66/withered_plant_1780242715692.png'
-dest_path = '/Users/tanishagupta/Desktop/projects/pomodoro/withered.png'
+img_path = 'withered_plant.png'
+dest_path = 'withered_transparent.png'
 
 if os.path.exists(img_path):
     img = Image.open(img_path).convert("RGBA")

@@ -1,7 +1,6 @@
 from PIL import Image
 import os
-
-folder = '/Users/tanishagupta/Desktop/projects/pomodoro'
+folder = './pomodoro_images'
 files = [f'stage{i}.png' for i in range(1, 7)] + ['withered.png']
 
 for file in files:

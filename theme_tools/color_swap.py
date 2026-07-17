@@ -1,6 +1,5 @@
 import re
-
-file_path = "/Users/tanishagupta/Desktop/bartr-web/app/page.tsx"
+file_path = "page.tsx"
 
 with open(file_path, "r", encoding="utf-8") as f:
     content = f.read()

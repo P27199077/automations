@@ -337,7 +337,6 @@ col_widths = {
 for col_letter, width in col_widths.items():
     ws.column_dimensions[col_letter].width = width
 
-# Save the workbook
-output_path = "/Users/tanishagupta/.gemini/antigravity-ide/scratch/life-reset-app/60_Day_Life_Reset_Planner.xlsx"
+output_path = "60_Day_Life_Reset_Planner.xlsx"
 wb.save(output_path)
 print(f"Excel workbook successfully saved to {output_path}")
