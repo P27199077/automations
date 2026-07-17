@@ -28,10 +28,14 @@ automations/
 │   ├── make_transparent.py    # Target color transparent rendering
 │   └── strip_backgrounds.py   # Multi-file background stripping
 │
-└── theme_tools/                # Style & color palette swappers
+├── theme_tools/                # Style & color palette swappers
+│   ├── README.md
+│   ├── color_palette_hex.py   # React/Tailwind project hex re-themer
+│   └── color_swap.py          # Tailwind slate -> stone color config converter
+│
+└── video_processing/           # Video alpha-channel extraction tools
     ├── README.md
-    ├── color_palette_hex.py   # React/Tailwind project hex re-themer
-    └── color_swap.py          # Tailwind slate -> stone color config converter
+    └── remove_video_bg.py     # Video background removal utility (chroma or AI)
 ```
 
 ---
