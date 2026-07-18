@@ -21,7 +21,7 @@ os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 # task_id -> { "filename": str, "status": str, "progress": int, "output_filename": str, "error": str, "config": dict }
 tasks = {}
 
-def process_video_task(task_id, input_path, output_path, method, format_type, key_color, tolerance, softness):
+def process_video_task(task_id, input_path, output_path, method, format_type, key_color, tolerance, softness, model_name, alpha_matting):
     tasks[task_id]['status'] = 'processing'
     tasks[task_id]['progress'] = 0
     
@@ -37,7 +37,9 @@ def process_video_task(task_id, input_path, output_path, method, format_type, ke
             key_color=key_color,
             tolerance=tolerance,
             softness=softness,
-            progress_callback=progress_callback
+            progress_callback=progress_callback,
+            model_name=model_name,
+            alpha_matting=alpha_matting
         )
         if success:
             tasks[task_id]['status'] = 'completed'
@@ -89,6 +91,8 @@ def process(task_id):
     color_str = data.get('color', 'green')
     tolerance = float(data.get('tolerance', 60.0))
     softness = float(data.get('softness', 10.0))
+    model_name = data.get('model', 'u2net')
+    alpha_matting = bool(data.get('alpha_matting', False))
 
     try:
         key_color = parse_color(color_str)
@@ -106,13 +110,15 @@ def process(task_id):
         "format": format_type,
         "color": color_str,
         "tolerance": tolerance,
-        "softness": softness
+        "softness": softness,
+        "model": model_name,
+        "alpha_matting": alpha_matting
     }
 
     # Start asynchronous processing thread
     thread = threading.Thread(
         target=process_video_task,
-        args=(task_id, tasks[task_id]['input_path'], output_path, method, format_type, key_color, tolerance, softness)
+        args=(task_id, tasks[task_id]['input_path'], output_path, method, format_type, key_color, tolerance, softness, model_name, alpha_matting)
     )
     thread.start()
 

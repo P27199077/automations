@@ -75,7 +75,7 @@ def chroma_key_pixel_data(img, key_color, tolerance, softness):
     img.putdata(newData)
     return img
 
-def process_frames(temp_in, temp_out, method, key_color, tolerance, softness, progress_callback=None):
+def process_frames(temp_in, temp_out, method, key_color, tolerance, softness, progress_callback=None, model_name="u2net", alpha_matting=False):
     frames = sorted([f for f in os.listdir(temp_in) if f.endswith(".png")])
     if not frames:
         print("Error: No frames found for processing.")
@@ -91,12 +91,13 @@ def process_frames(temp_in, temp_out, method, key_color, tolerance, softness, pr
     print(f"Processing {len(frames)} frames...")
     
     if method == "ai":
-        from rembg import remove
+        from rembg import remove, new_session
+        session = new_session(model_name)
         for idx, frame in enumerate(tqdm(frames, desc="AI Segmenting")):
             in_path = os.path.join(temp_in, frame)
             out_path = os.path.join(temp_out, frame)
             with Image.open(in_path) as img:
-                res = remove(img)
+                res = remove(img, session=session, alpha_matting=alpha_matting)
                 res.save(out_path)
             if progress_callback:
                 progress_callback(int((idx + 1) / len(frames) * 100))
@@ -111,7 +112,7 @@ def process_frames(temp_in, temp_out, method, key_color, tolerance, softness, pr
                 progress_callback(int((idx + 1) / len(frames) * 100))
     return True
 
-def convert_video(input_path, output_path, method, format_type, key_color, tolerance, softness, progress_callback=None):
+def convert_video(input_path, output_path, method, format_type, key_color, tolerance, softness, progress_callback=None, model_name="u2net", alpha_matting=False):
     input_path = os.path.abspath(input_path)
     output_path = os.path.abspath(output_path)
     
@@ -136,7 +137,7 @@ def convert_video(input_path, output_path, method, format_type, key_color, toler
         subprocess.run(extract_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
 
         # 2. Process each frame
-        success = process_frames(temp_in, temp_out, method, key_color, tolerance, softness, progress_callback)
+        success = process_frames(temp_in, temp_out, method, key_color, tolerance, softness, progress_callback, model_name, alpha_matting)
         if not success:
             return False
 
@@ -202,6 +203,8 @@ def main():
     parser.add_argument("-c", "--color", type=parse_color, default="green", help="Chroma key color to remove (name, hex, or RGB comma-separated)")
     parser.add_argument("-t", "--tolerance", type=float, default=60.0, help="Chroma key tolerance threshold")
     parser.add_argument("-s", "--softness", type=float, default=10.0, help="Chroma key edge softness range")
+    parser.add_argument("--model", default="u2net", choices=["u2net", "u2net_human_seg", "isnet-general-use"], help="AI model name for segmentation")
+    parser.add_argument("--alpha-matting", action="store_true", default=False, help="Enable alpha matting for cleaner edges")
     
     args = parser.parse_args()
 
@@ -224,7 +227,17 @@ def main():
         else:
             output_path = base + "_transparent." + args.format
 
-    convert_video(input_path, output_path, args.method, args.format, args.color, args.tolerance, args.softness)
+    convert_video(
+        input_path=input_path,
+        output_path=output_path,
+        method=args.method,
+        format_type=args.format,
+        key_color=args.color,
+        tolerance=args.tolerance,
+        softness=args.softness,
+        model_name=args.model,
+        alpha_matting=args.alpha_matting
+    )
 
 if __name__ == "__main__":
     main()
